@@ -1,0 +1,32 @@
+metadata:
+    format: Lava-Test Test Definition 1.0
+    name: qc-tests-basic
+    description: "Basic qc test command for prebuild images. The test calls basic qc shell scripts"
+
+    maintainer:
+        - po.cheng@adlinktech.com
+    os:
+        - debian
+    scope:
+        - functional
+    devices:
+        - lec-imx8m
+        - lec-imx8mp
+
+
+run:
+    steps:
+        - lava-test-case linux-linaro-yocto-pwd --shell pwd
+        - lava-test-case linux-linaro-yocto-uname --shell uname -a
+        - lava-test-case linux-linaro-yocto-vmstat --shell vmstat
+        - lava-test-case linux-linaro-yocto-ifconfig --shell ifconfig -a
+        - lava-test-case linux-linaro-yocto-lscpu --shell lscpu
+        - lava-test-case linux-linaro-yocto-lsb_release --shell lsb_release -a
+        - lava-test-case linux-linaro-yocto-mount --shell mount
+        - lava-test-case linux-linaro-yocto-df --shell df -h
+        - lava-test-case linux-linaro-yocto-ifconfig --shell ifconfig -a
+        - lava-test-case linux-linaro-yocto-netstat --shell netstat -an
+        - lava-test-case linux-linaro-yocto-route-dump-a --shell route
+        - lava-test-case linux-linaro-yocto-route-ifconfig-up-lo --shell ifconfig lo up
+        - lava-test-case linux-linaro-yocto-route-dump-b --shell route
+        - lava-test-case linux-linaro-yocto-lsusb --shell lsusb -v
