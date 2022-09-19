@@ -1,0 +1,34 @@
+metadata:
+    format: Lava-Test Test Definition 1.0
+    name: scelnx-tests-basic
+    description: "Basic scelnx command to set network PXE boot"
+
+    maintainer:
+        - po.cheng@adlinktech.com
+    os:
+        - oe
+    scope:
+        - functional
+    devices:
+        - x86_64
+
+run:
+    steps:
+        - cd /usr/sbin
+        - ./scelnx_64 /o /ms 'Network Stack' /lang en-US
+        - ./scelnx_64 /o /ms '  Ipv4 PXE Support' /lang en-US
+        - ./scelnx_64 /o /ms '  Ipv6 PXE Support' /lang en-US
+        - ./scelnx_64 /i /ms 'Network Stack' /qv '0x01' /lang en-US
+        - ./scelnx_64 /i /ms '  Ipv4 PXE Support' /qv '0x01' /lang en-US
+        - ./scelnx_64 /i /ms '  Ipv6 PXE Support' /qv '0x00' /lang en-US
+        - ./scelnx_64 /o /ms 'Network Stack' /lang en-US
+        - ./scelnx_64 /o /ms '  Ipv4 PXE Support' /lang en-US
+        - ./scelnx_64 /o /ms '  Ipv6 PXE Support' /lang en-US
+        - ./scelnx_64 /o /s default.scr
+        - head -5 default.scr > import.scr
+        - awk '/^Setup Question\t= Boot Option .1/,/Disabled/ {print$0}' default.scr >> import.scr
+        - sed -i 's,*\[00\]Hard,\[00\]Hard,g' import.scr
+        - sed -i -E 's,\[(.*)\]Network:UEFI,*\[\1\]Network:UEFI,g' import.scr
+        - cat import.scr
+        - lava-test-case linux-linaro-yocto-import-script --shell ./scelnx_64 /i /s import.scr
+
